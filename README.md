@@ -2,13 +2,7 @@
 
 > A full-stack fintech platform built with **Spring Boot** (REST API + ledger engine) and **Angular** (enterprise dashboard), backed by PostgreSQL. The learning path follows the official [roadmap.sh](https://roadmap.sh/dashboard) tracks for [Spring Boot](https://roadmap.sh/spring-boot) and [Angular](https://roadmap.sh/angular), applied to a real financial product.
 
-![Java](https://img.shields.io/badge/Java-17+-orange)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-green)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue)
-![Angular](https://img.shields.io/badge/Angular-latest-red)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue)
-
-The Fintech System is a learning-by-building project: instead of learning Spring Boot and Angular in isolation, we build a real fintech platform step by step — multi-currency wallets (KES, USD, BTC), a double-entry ledger, JWT security, dashboards, and async integrations like M-Pesa webhooks.
+The Fintech System is a learning-by-building project: instead of learning Spring Boot and Angular in isolation, we build a real fintech platform step by step - multi-currency wallets (KES, USD, BTC), a double-entry ledger, JWT security, dashboards, and async integrations like M-Pesa webhooks.
 
 ---
 
@@ -33,10 +27,10 @@ The Fintech System is a learning-by-building project: instead of learning Spring
 
 The system has two halves:
 
-- **Backend** — a Spring Boot REST API that owns all business logic: the core ledger engine, JWT authentication with role-based access control, idempotent transfer endpoints, and async jobs.
-- **Frontend** — an Angular application that consumes the API and provides a responsive dashboard for wallets, transfers, exchange, and portfolio summaries.
+- **Backend** - a Spring Boot REST API that owns all business logic: the core ledger engine, JWT authentication with role-based access control, idempotent transfer endpoints, and async jobs.
+- **Frontend** - an Angular application that consumes the API and provides a responsive dashboard for wallets, transfers, exchange, and portfolio summaries.
 
-The guiding principle: **Spring Boot owns the money.** No client-side database writes, no business rules in the browser — the API is the only path to the ledger.
+The guiding principle: **Spring Boot owns the money.** No client-side database writes, no business rules in the browser - the API is the only path to the ledger.
 
 ## Architecture at a Glance
 
@@ -59,7 +53,7 @@ flowchart LR
 
     subgraph ASYNC["Async Layer"]
         I[Kafka / RabbitMQ]
-        J[Webhooks<br/>M-Pesa · Crypto]
+        J[Webhooks<br/>M-Pesa / Crypto]
     end
 
     C -->|HTTP + JSON + JWT| D
@@ -85,17 +79,17 @@ flowchart LR
 
 ## Database & Architecture Decisions
 
-### PostgreSQL — yes, the right call
+### PostgreSQL - yes, the right call
 
-- **ACID guarantees:** multi-currency transfers are atomic — either both the debit and credit happen, or neither does.
+- **ACID guarantees:** multi-currency transfers are atomic - either both the debit and credit happen, or neither does.
 - **Exact math precision:** `NUMERIC` prevents floating-point rounding errors on financial values (e.g., fractional crypto amounts like `0.00000001` BTC).
 - **Concurrency controls:** row-level pessimistic locking (`SELECT ... FOR UPDATE`) prevents race conditions during simultaneous transfers.
 
-### Supabase — yes as a managed database host
+### Supabase - yes as a managed database host
 
 Spring Boot connects directly to Supabase's PostgreSQL database with standard JDBC / Spring Data JPA credentials. You get an enterprise database on cloud infrastructure with automatic backups and a visual SQL browser out of the box.
 
-### Supabase — no for client SDKs / Auth / Realtime
+### Supabase - no for client SDKs / Auth / Realtime
 
 Do **not** use the Supabase client SDKs inside Spring Boot or Angular. In a Java enterprise stack, Spring Boot must own business logic, security, and authentication via **Spring Security + JWT**. Allowing direct client-side database writes would bypass the strict ledger validation rules that keep the books balanced.
 
@@ -103,20 +97,20 @@ Do **not** use the Supabase client SDKs inside Spring Boot or Angular. In a Java
 
 ```text
 fintech-stack/
-├── backend/                     # Spring Boot REST API
-│   ├── src/main/java/...        # controllers, services, entities, security, ledger
-│   ├── src/main/resources/
-│   │   ├── db/migration/        # Flyway / Liquibase migrations
-│   │   └── application.yml
-│   └── pom.xml
-├── frontend/                    # Angular SPA
-│   └── src/app/
-│       ├── features/            # auth, dashboard, wallet, admin
-│       ├── core/                # interceptors, guards, state
-│       └── shared/              # UI components, models
-├── docs/                        # Design decisions and roadmap notes
-├── .gitignore
-└── README.md
+|-- backend/                     # Spring Boot REST API
+|   |-- src/main/java/...        # controllers, services, entities, security, ledger
+|   |-- src/main/resources/
+|   |   |-- db/migration/        # Flyway / Liquibase migrations
+|   |   `-- application.yml
+|   `-- pom.xml
+|-- frontend/                    # Angular SPA
+|   `-- src/app/
+|       |-- features/            # auth, dashboard, wallet, admin
+|       |-- core/                # interceptors, guards, state
+|       `-- shared/              # UI components, models
+|-- docs/                        # Design decisions and roadmap notes
+|-- .gitignore
+`-- README.md
 ```
 
 > The `backend/` and `frontend/` folders will be added in [Milestone 1](#full-stack-milestones).
@@ -165,18 +159,18 @@ Key settings: PostgreSQL URL/credentials (local or Supabase), Redis connection, 
 
 ## Learning Roadmap
 
-A 4-phase internship roadmap, sequenced so the financial heart of the platform is built before the UI. Every phase maps back to the official [Spring Boot](https://roadmap.sh/spring-boot) and [Angular](https://roadmap.sh/angular) roadmaps — tick the boxes as you go.
+A 4-phase internship roadmap, sequenced so the financial heart of the platform is built before the UI. Every phase maps back to the official [Spring Boot](https://roadmap.sh/spring-boot) and [Angular](https://roadmap.sh/angular) roadmaps - tick the boxes as you go.
 
 ### Roadmap Overview
 
 ```mermaid
 flowchart TD
-    P1[Phase 1<br/>Core Ledger Engine<br/>Java · Spring Boot · PostgreSQL] --> P2[Phase 2<br/>Secure APIs & Business Logic<br/>Spring Security · JWT · RBAC]
-    P2 --> P3[Phase 3<br/>Enterprise Angular Dashboard<br/>RxJS · Forms · Interceptors]
-    P3 --> P4[Phase 4<br/>Advanced Fintech<br/>Kafka · Audit · Webhooks]
+    P1[Phase 1<br/>Core Ledger Engine<br/>Java / Spring Boot / PostgreSQL] --> P2[Phase 2<br/>Secure APIs & Business Logic<br/>Spring Security / JWT / RBAC]
+    P2 --> P3[Phase 3<br/>Enterprise Angular Dashboard<br/>RxJS / Forms / Interceptors]
+    P3 --> P4[Phase 4<br/>Advanced Fintech<br/>Kafka / Audit / Webhooks]
 ```
 
-### Phase 1 — Core Ledger Engine (Java & Database)
+### Phase 1 - Core Ledger Engine (Java & Database)
 
 **Goal:** build the financial heart of the platform before touching the UI.
 
@@ -231,7 +225,7 @@ erDiagram
 
 **Milestone:** a transfer endpoint that atomically creates balanced debit/credit ledger entries.
 
-### Phase 2 — Secure APIs & Business Logic
+### Phase 2 - Secure APIs & Business Logic
 
 **Goal:** expose secure, stateless endpoints for frontend consumption.
 
@@ -240,9 +234,9 @@ erDiagram
 - [ ] JWT-based authentication: login, register, password hashing (BCrypt)
 - [ ] Role-based access control (RBAC): `ROLE_CUSTOMER`, `ROLE_BUSINESS`, `ROLE_ADMIN`
 - [ ] DTO-driven REST endpoints:
-  - [ ] `POST /api/v1/wallets/transfer`
-  - [ ] `POST /api/v1/exchange`
-  - [ ] `GET /api/v1/portfolio/summary`
+- [ ] `POST /api/v1/wallets/transfer`
+- [ ] `POST /api/v1/exchange`
+- [ ] `GET /api/v1/portfolio/summary`
 - [ ] Idempotency with Redis keys so network retries never double-charge a user
 - [ ] Request validation, exception handling, and clean API error responses
 
@@ -257,18 +251,18 @@ sequenceDiagram
 
     C->>S: POST /api/v1/wallets/transfer (Idempotency-Key)
     S->>R: Check / set idempotency key
-    S->>DB: BEGIN · SELECT ... FOR UPDATE (both wallets)
+    S->>DB: BEGIN + SELECT ... FOR UPDATE (both wallets)
     S->>S: Validate balances and exchange rate
-    S->>DB: Debit wallet A · Credit wallet B · ledger entries
+    S->>DB: Debit wallet A, Credit wallet B, ledger entries
     S->>DB: COMMIT
-    S->>C: 200 OK · balanced ledger
+    S->>C: 200 OK - balanced ledger
 ```
 
 **Roadmap.sh topics covered:** Spring MVC & REST, Spring Security (authentication, authorization, JWT, OAuth2 later), testing with MockMvc / `@SpringBootTest` / `@MockBean`.
 
 **Milestone:** protected transfer + exchange endpoints that are safe under concurrent retries.
 
-### Phase 3 — Enterprise Angular Dashboard
+### Phase 3 - Enterprise Angular Dashboard
 
 **Goal:** build a responsive dashboard matching the modern wallet experience.
 
@@ -285,7 +279,7 @@ sequenceDiagram
 
 **Milestone:** a wallet dashboard with live balances, portfolio summary, and a validated multi-step transfer form.
 
-### Phase 4 — Advanced Fintech Capabilities
+### Phase 4 - Advanced Fintech Capabilities
 
 **Goal:** elevate the app to enterprise standards.
 
@@ -306,11 +300,11 @@ sequenceDiagram
 
 ## Full-Stack Milestones
 
-- [ ] **M1 — Skeleton:** both apps scaffolded; frontend calls the backend `/api/v1/health` endpoint.
-- [ ] **M2 — Ledger engine:** schema + Flyway migrations, `Account`/`Wallet` entities, transfer API with double-entry validation and pessimistic locking.
-- [ ] **M3 — Security:** JWT login, RBAC roles, idempotent transfer endpoints with Redis.
-- [ ] **M4 — Dashboard:** Angular wallet dashboard, portfolio summary, multi-step transfer flow with charts.
-- [ ] **M5 — Enterprise:** async broker jobs, audit log, mock M-Pesa/crypto webhooks, tests, Docker, CI/CD, live deployment.
+- [ ] **M1 - Skeleton:** both apps scaffolded; frontend calls the backend `/api/v1/health` endpoint.
+- [ ] **M2 - Ledger engine:** schema + Flyway migrations, `Account`/`Wallet` entities, transfer API with double-entry validation and pessimistic locking.
+- [ ] **M3 - Security:** JWT login, RBAC roles, idempotent transfer endpoints with Redis.
+- [ ] **M4 - Dashboard:** Angular wallet dashboard, portfolio summary, multi-step transfer flow with charts.
+- [ ] **M5 - Enterprise:** async broker jobs, audit log, mock M-Pesa/crypto webhooks, tests, Docker, CI/CD, live deployment.
 
 ## 12-Week Plan
 
@@ -350,7 +344,7 @@ timeline
 
 - Tick the checkboxes in this README as you complete topics.
 - Track the same progress visually on your [roadmap.sh dashboard](https://roadmap.sh/dashboard).
-- Reference roadmaps: [Spring Boot](https://roadmap.sh/spring-boot) · [Angular](https://roadmap.sh/angular) · [Java](https://roadmap.sh/java) · [Backend](https://roadmap.sh/backend) · [Frontend](https://roadmap.sh/frontend)
+- Reference roadmaps: [Spring Boot](https://roadmap.sh/spring-boot), [Angular](https://roadmap.sh/angular), [Java](https://roadmap.sh/java), [Backend](https://roadmap.sh/backend), [Frontend](https://roadmap.sh/frontend)
 
 ## Publishing to GitHub
 
@@ -372,6 +366,6 @@ git push
 
 ## License
 
-MIT (add a `LICENSE` file before publishing publicly).
+MIT License
 
 By Joy kamau
