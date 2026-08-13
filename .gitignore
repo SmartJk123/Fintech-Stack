@@ -1,0 +1,38 @@
+# === IDE / OS ===
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# === Logs ===
+*.log
+
+# === Backend (Spring Boot / Maven / Gradle) ===
+target/
+build/
+*.class
+*.jar
+*.war
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/timing.properties
+out/
+
+# Local configuration with secrets (keep templates committed)
+application-local.yml
+application-local.properties
+application-dev.yml
+application-dev.properties
+.env
+
+# === Frontend (Angular / Node) ===
+node_modules/
+dist/
+.angular/
+coverage/
+.tmp/
+.cache/
+
+# === Testing ===
+test-results/
+*.lcov
