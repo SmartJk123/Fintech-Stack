@@ -103,20 +103,25 @@ fintech-stack/
 |   |   |-- db/migration/        # Flyway / Liquibase migrations
 |   |   `-- application.yml
 |   `-- pom.xml
-|-- frontend/                    # Angular SPA
-|   |-- index.html               # starter shell (header + footer demo)
-|   |-- assets/
-|   |   `-- styles.css           # indigo + golden theme
-|   `-- src/app/
-|       |-- features/            # auth, dashboard, wallet, admin
-|       |-- core/                # interceptors, guards, state
-|       `-- shared/              # UI components, models
+|-- frontend/                    # Angular 21 SPA
+|   |-- src/
+|   |   |-- app/
+|   |   |   |-- layout/
+|   |   |   |   |-- header/    # indigo header + golden border
+|   |   |   |   `-- footer/    # indigo footer + golden border
+|   |   |   |-- features/      # auth, dashboard, wallet, admin (planned)
+|   |   |   |-- core/          # interceptors, guards, state (planned)
+|   |   |   `-- shared/        # UI components, models (planned)
+|   |   |-- styles.css         # indigo + golden theme
+|   |   `-- index.html
+|   |-- angular.json
+|   `-- package.json
 |-- docs/                        # Design decisions and roadmap notes
 |-- .gitignore
 `-- README.md
 ```
 
-> The `backend/` and `frontend/` folders will be added in [Milestone 1](#full-stack-milestones).
+> The `backend/` folder will be added in [Milestone 1](#full-stack-milestones).
 
 ## Getting Started
 
