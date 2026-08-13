@@ -104,6 +104,9 @@ fintech-stack/
 |   |   `-- application.yml
 |   `-- pom.xml
 |-- frontend/                    # Angular SPA
+|   |-- index.html               # starter shell (header + footer demo)
+|   |-- assets/
+|   |   `-- styles.css           # indigo + golden theme
 |   `-- src/app/
 |       |-- features/            # auth, dashboard, wallet, admin
 |       |-- core/                # interceptors, guards, state
