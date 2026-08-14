@@ -37,23 +37,23 @@ The guiding principle: **Spring Boot owns the money.** No client-side database w
 ```mermaid
 flowchart LR
     subgraph FE["Angular SPA"]
-        A[Wallet Dashboard] --> B[Services / RxJS / Signals]
-        B --> C[Reactive Forms + HTTP Interceptors]
+        A[Wallet Dashboard] --> B["Services / RxJS / Signals"]
+        B --> C["Reactive Forms + HTTP Interceptors"]
     end
 
     subgraph BE["Spring Boot API"]
-        D[Controllers / DTOs] --> E[Services<br/>@Transactional Ledger Engine]
-        E --> F[Spring Security<br/>JWT + RBAC]
+        D["Controllers / DTOs"] --> E["Services<br/>@Transactional Ledger Engine"]
+        E --> F["Spring Security<br/>JWT + RBAC"]
     end
 
     subgraph DATA["Data Layer"]
-        G[(PostgreSQL<br/>via Supabase)]
-        H[(Redis<br/>Idempotency + Cache)]
+        G[("PostgreSQL<br/>via Supabase")]
+        H[("Redis<br/>Idempotency + Cache")]
     end
 
     subgraph ASYNC["Async Layer"]
-        I[Kafka / RabbitMQ]
-        J[Webhooks<br/>M-Pesa / Crypto]
+        I["Kafka / RabbitMQ"]
+        J["Webhooks<br/>M-Pesa / Crypto"]
     end
 
     C -->|HTTP + JSON + JWT| D
@@ -132,6 +132,55 @@ fintech-stack/
 - Git
 - PostgreSQL (local or Supabase) and Redis (Docker recommended)
 
+Pick your operating system below for install commands, then run the app with the Backend / Frontend steps.
+
+### Platform-Specific Setup
+
+#### Ubuntu / Debian (Linux)
+
+```bash
+# Update package lists and install the toolchain
+sudo apt update
+sudo apt install -y git openjdk-17-jdk
+
+# Node.js 18+ from NodeSource
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs
+
+# PostgreSQL
+sudo apt install -y postgresql postgresql-contrib
+sudo systemctl enable --now postgresql
+
+# Redis
+sudo apt install -y redis-server
+sudo systemctl enable --now redis-server
+
+# Docker (optional, recommended for Redis/Supabase)
+sudo apt install -y docker.io docker-compose
+sudo systemctl enable --now docker
+```
+
+> Other Linux distributions: install the same tools via your package manager - Fedora/RHEL (`java-17-openjdk`, `nodejs`, `postgresql-server`, `redis`), Arch (`jdk17-openjdk`, `nodejs`, `postgresql`, `redis`) - then enable PostgreSQL and Redis with `systemctl`.
+
+#### macOS (Homebrew)
+
+```bash
+# Install Homebrew first (https://brew.sh), then:
+brew install openjdk@17 node git postgresql@16 redis
+brew install --cask docker
+
+# Make OpenJDK visible to the system (Apple Silicon path shown)
+sudo ln -sfn /opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-17.jdk
+
+# Start the services
+brew services start postgresql@16
+brew services start redis
+```
+
+#### Windows
+
+Install JDK 17+, Node.js LTS, Git for Windows, PostgreSQL, and Redis (or Docker Desktop) from the official installers, then use `mvnw.cmd` instead of `./mvnw` in the backend commands below.
+
 ### Backend (Spring Boot)
 
 Scaffold from [Spring Initializr](https://start.spring.io/) with: **Spring Web, Spring Data JPA, Spring Security, Validation, PostgreSQL Driver, Flyway/Liquibase, Spring Boot Actuator, Lombok**, then run:
@@ -167,15 +216,15 @@ Key settings: PostgreSQL URL/credentials (local or Supabase), Redis connection, 
 
 ## Learning Roadmap
 
-A 4-phase internship roadmap, sequenced so the financial heart of the platform is built before the UI. Every phase maps back to the official [Spring Boot](https://roadmap.sh/spring-boot) and [Angular](https://roadmap.sh/angular) roadmaps - tick the boxes as you go.
+A 4-phase internship roadmap, sequenced so the financial heart of the platform is built before the UI. Every phase maps back to the official [Spring Boot](https://roadmap.sh/spring-boot) and [Angular](https://roadmap.sh/angular) roadmaps - tick the boxes as you go. Start by setting up your machine: [Ubuntu / Linux, macOS, or Windows](#platform-specific-setup).
 
 ### Roadmap Overview
 
 ```mermaid
 flowchart TD
-    P1[Phase 1<br/>Core Ledger Engine<br/>Java / Spring Boot / PostgreSQL] --> P2[Phase 2<br/>Secure APIs & Business Logic<br/>Spring Security / JWT / RBAC]
-    P2 --> P3[Phase 3<br/>Enterprise Angular Dashboard<br/>RxJS / Forms / Interceptors]
-    P3 --> P4[Phase 4<br/>Advanced Fintech<br/>Kafka / Audit / Webhooks]
+    P1["Phase 1<br/>Core Ledger Engine<br/>Java / Spring Boot / PostgreSQL"] --> P2["Phase 2<br/>Secure APIs & Business Logic<br/>Spring Security / JWT / RBAC"]
+    P2 --> P3["Phase 3<br/>Enterprise Angular Dashboard<br/>RxJS / Forms / Interceptors"]
+    P3 --> P4["Phase 4<br/>Advanced Fintech<br/>Kafka / Audit / Webhooks"]
 ```
 
 ### Phase 1 - Core Ledger Engine (Java & Database)
