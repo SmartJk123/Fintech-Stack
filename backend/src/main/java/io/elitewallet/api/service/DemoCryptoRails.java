@@ -20,22 +20,22 @@ public class DemoCryptoRails implements CryptoRails {
 
     private static final Logger log = LoggerFactory.getLogger(DemoCryptoRails.class);
 
-    private static final Map<String, String> NETWORKS = Map.of(
-            "BTC", "Bitcoin",
-            "ETH", "Ethereum",
-            "SOL", "Solana",
-            "XRP", "XRP Ledger",
-            "ADA", "Cardano",
-            "DOGE", "Dogecoin",
-            "LTC", "Litecoin",
-            "DOT", "Polkadot",
-            "AVAX", "Avalanche C-Chain",
-            "TRX", "TRON",
-            "BCH", "Bitcoin Cash",
-            "ATOM", "Cosmos",
-            "XLM", "Stellar",
-            "SHIB", "Ethereum",
-            "POL", "Polygon");
+    private static final Map<String, String> NETWORKS = Map.ofEntries(
+            Map.entry("BTC", "Bitcoin"),
+            Map.entry("ETH", "Ethereum"),
+            Map.entry("SOL", "Solana"),
+            Map.entry("XRP", "XRP Ledger"),
+            Map.entry("ADA", "Cardano"),
+            Map.entry("DOGE", "Dogecoin"),
+            Map.entry("LTC", "Litecoin"),
+            Map.entry("DOT", "Polkadot"),
+            Map.entry("AVAX", "Avalanche C-Chain"),
+            Map.entry("TRX", "TRON"),
+            Map.entry("BCH", "Bitcoin Cash"),
+            Map.entry("ATOM", "Cosmos"),
+            Map.entry("XLM", "Stellar"),
+            Map.entry("SHIB", "Ethereum"),
+            Map.entry("POL", "Polygon"));
 
     @Override
     public String addressFor(String userId, String asset) {

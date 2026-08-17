@@ -192,7 +192,7 @@ public class MpesaService {
         if (item != null && item.path("Value").isNumber()) {
             return item.path("Value").decimalValue();
         }
-        JsonNode transaction = transactionService.findByReference(callback.path("CheckoutRequestID").asText()).orElse(null);
+        TransactionEntity transaction = transactionService.findByReference(callback.path("CheckoutRequestID").asText()).orElse(null);
         return transaction != null ? transaction.getAmount() : BigDecimal.ZERO;
     }
 
