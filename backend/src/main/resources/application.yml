@@ -1,0 +1,41 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: elite-wallet-api
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/elitewallet}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+app:
+  jwt:
+    # Replace in production. Must be at least 32 bytes.
+    secret: ${JWT_SECRET:elite-wallet-prototype-secret-change-me-in-production-0123456789}
+    expiration-ms: ${JWT_EXPIRATION_MS:86400000}
+
+mpesa:
+  consumer-key: ${MPESA_CONSUMER_KEY:}
+  consumer-secret: ${MPESA_CONSUMER_SECRET:}
+  shortcode: ${MPESA_SHORTCODE:174379}
+  passkey: ${MPESA_PASSKEY:}
+  env: ${MPESA_ENV:sandbox}
+  callback-url: ${MPESA_CALLBACK_URL:https://example.com/webhooks/mpesa/stk-callback}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
