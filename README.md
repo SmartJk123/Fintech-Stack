@@ -35,9 +35,9 @@ The guiding principle: **Spring Boot owns the money.** No client-side database w
 
 ## Frontend (Angular)
 
-The repository frontend is an **Angular 21** SPA (TypeScript), scaffolded with the
-indigo + golden theme (header/footer shell). It will grow into the full enterprise
-dashboard (Phase 3) that consumes the Spring Boot API.
+The repository frontend is an **Angular 21** SPA (TypeScript) implementing the live wallet UI:
+registration/login, dashboard with multi-asset balances and live rates, M-Pesa and
+crypto deposit/withdrawal pages, and a full transaction history.
 
 > The complete **React + Vite** prototype (EliteWallet) that defined the wallet
 experience (20+ pages, mock services, M-Pesa STK Push demo) is preserved in git
@@ -49,6 +49,57 @@ The REST contract the API implements is defined in
 Angular + Spring Boot conversion prompts in
 [frontend/docs/vscode-ai-prompts.md](frontend/docs/vscode-ai-prompts.md).
 
+## Transactional Wallet (Implemented)
+
+The wallet engine is live in `backend/` and wired to the Angular frontend:
+
+- **Auth** — JWT register/login (`POST /api/v1/auth/register`, `POST /api/v1/auth/login`, `GET /api/v1/auth/me`)
+- **Ledger** — double-entry `ledger_entries` posted atomically with pessimistic row locks; idempotent per provider reference
+- **Deposits** — M-Pesa STK Push (`POST /api/v1/deposits/mpesa`) and crypto demo credits (`POST /api/v1/deposits/crypto`)
+- **Withdrawals** — M-Pesa B2C payouts (`POST /api/v1/withdrawals/mpesa`) and crypto demo broadcasts (`POST /api/v1/withdrawals/crypto`), with automatic refunds on failure
+- **Webhooks** — `POST /api/v1/webhooks/mpesa/stk-callback`, `POST /api/v1/webhooks/mpesa/b2c-result` (public, idempotent)
+- **Assets** — 24 fiat currencies + 22 crypto assets, any of which can hold a balance
+- **Rates** — live CoinGecko + open.er-api rates cached 5 minutes with static fallback (`GET /api/v1/rates`)
+
+### M-Pesa setup (sandbox)
+
+Register at the [Daraja developer portal](https://developer.safaricom.co.ke), create an app, then set:
+
+```bash
+MPESA_CONSUMER_KEY=...    MPESA_CONSUMER_SECRET=...
+MPESA_PASSKEY=...         MPESA_SHORTCODE=174379
+MPESA_CALLBACK_URL=https://<your-public-host>/api/v1/webhooks/mpesa/stk-callback
+MPESA_B2C_RESULT_URL=https://<your-public-host>/api/v1/webhooks/mpesa/b2c-result
+MPESA_B2C_QUEUE_TIMEOUT_URL=https://<your-public-host>/api/v1/webhooks/mpesa/b2c-result
+MPESA_INITIATOR_NAME=...  MPESA_SECURITY_CREDENTIAL=...
+```
+
+Daraja callbacks must be publicly reachable HTTPS URLs — use ngrok during local development.
+Withdrawals (B2C) need an approved initiator + security credential for production.
+
+### Crypto rails
+
+Crypto deposits and withdrawals run in **demo mode** (instant credit / simulated broadcast, clearly
+marked in the UI) through the `CryptoRails` interface. For production, implement that interface with
+a real provider (BitGo, Coinbase Prime, Blockstream, or a self-hosted node) — the ledger, idempotency,
+and UI do not change.
+
+### API overview
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| POST | `/api/v1/auth/register` | Create account (JWT returned) |
+| POST | `/api/v1/auth/login` | Sign in |
+| GET | `/api/v1/auth/me` | Current user |
+| GET | `/api/v1/wallets` | Wallet balances |
+| GET | `/api/v1/rates` | Live rates for all assets |
+| GET | `/api/v1/transactions` | Transaction history |
+| POST | `/api/v1/deposits/mpesa` | STK push deposit (KES) |
+| POST | `/api/v1/deposits/crypto` | Crypto demo deposit |
+| POST | `/api/v1/withdrawals/mpesa` | B2C withdrawal (KES) |
+| POST | `/api/v1/withdrawals/crypto` | Crypto demo withdrawal |
+| POST | `/api/v1/webhooks/mpesa/stk-callback` | Daraja STK callback |
+| POST | `/api/v1/webhooks/mpesa/b2c-result` | Daraja B2C result |
 ## Architecture at a Glance
 
 ```mermaid
@@ -213,17 +264,19 @@ The app will be available at `http://localhost:4200`.
 
 ### Configuration
 
-Copy the sample configuration and adjust values locally:
+All secrets and endpoints are environment-driven with safe local defaults:
 
-```bash
-cp backend/src/main/resources/application.example.yml backend/src/main/resources/application-local.yml
-```
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `DB_URL` / `DB_USERNAME` / `DB_PASSWORD` | `jdbc:postgresql://localhost:5432/elitewallet` / `postgres` / `postgres` | PostgreSQL |
+| `JWT_SECRET` | prototype secret | JWT signing key (change in production) |
+| `CORS_ALLOWED_ORIGINS` | `http://localhost:4200` | Angular dev origin |
+| `MPESA_*` | sandbox defaults | Daraja credentials/URLs (see Transactional Wallet) |
+| `RATES_CACHE_TTL_SECONDS` | `300` | Exchange-rate cache TTL |
 
-Key settings: PostgreSQL URL/credentials (local or Supabase), Redis connection, JWT secret, and the Angular API base URL.
+The Angular app points at the backend via `frontend/src/environments/environment.ts` (change `apiUrl` to the deployed backend).
 
----
-
-## Learning Roadmap
+---## Learning Roadmap
 
 A 4-phase internship roadmap, sequenced so the financial heart of the platform is built before the UI. Every phase maps back to the official [Spring Boot](https://roadmap.sh/spring-boot) and [Angular](https://roadmap.sh/angular) roadmaps - tick the boxes as you go. Start by setting up your machine: [Ubuntu / Linux, macOS, or Windows](#platform-specific-setup).
 

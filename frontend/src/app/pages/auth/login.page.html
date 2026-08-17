@@ -1,0 +1,31 @@
+<section class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-brand">
+      <span class="auth-mark">E</span>
+      <h1>EliteWallet</h1>
+      <p>Sign in to your transactional wallet.</p>
+    </div>
+
+    @if (error()) {
+      <div class="alert alert-error">{{ error() }}</div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+      <label class="field">
+        <span>Email</span>
+        <input formControlName="email" type="email" placeholder="you@example.com" autocomplete="email" />
+      </label>
+
+      <label class="field">
+        <span>Password</span>
+        <input formControlName="password" type="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" autocomplete="current-password" />
+      </label>
+
+      <button type="submit" class="btn btn-golden btn-block" [disabled]="busy() || form.invalid">
+        {{ busy() ? 'Signing in…' : 'Sign in' }}
+      </button>
+    </form>
+
+    <p class="auth-alt">New here? <a routerLink="/register">Create an account</a></p>
+  </div>
+</section>

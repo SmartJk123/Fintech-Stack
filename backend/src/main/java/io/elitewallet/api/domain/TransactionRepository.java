@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface TransactionRepository extends JpaRepository<TransactionEntity, String> {
     List<TransactionEntity> findAllByUserIdOrderByDateDesc(String userId);
     Optional<TransactionEntity> findByIdAndUserId(String id, String userId);
+    Optional<TransactionEntity> findByReference(String reference);
 }

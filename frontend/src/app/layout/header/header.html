@@ -1,19 +1,26 @@
 <header class="site-header">
   <div class="container header-inner">
-    <a routerLink="/" class="brand" aria-label="Fintech System home">
-      <span class="brand-mark">F</span>
-      <span class="brand-name">Fintech System</span>
+    <a routerLink="/" class="brand" aria-label="EliteWallet home">
+      <span class="brand-mark">E</span>
+      <span class="brand-name">EliteWallet</span>
     </a>
 
-    <nav class="main-nav" aria-label="Main navigation">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">Dashboard</a>
-      <a routerLink="/wallets" routerLinkActive="active" class="nav-link">Wallets</a>
-      <a routerLink="/exchange" routerLinkActive="active" class="nav-link">Exchange</a>
-      <a routerLink="/admin" routerLinkActive="active" class="nav-link">Admin</a>
-    </nav>
-
-    <div class="header-actions">
-      <span class="user-chip">SmartJk123</span>
-    </div>
+    @if (auth.isAuthenticated()) {
+      <nav class="main-nav" aria-label="Main navigation">
+        <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">Dashboard</a>
+        <a routerLink="/deposit" routerLinkActive="active" class="nav-link">Deposit</a>
+        <a routerLink="/withdraw" routerLinkActive="active" class="nav-link">Withdraw</a>
+        <a routerLink="/transactions" routerLinkActive="active" class="nav-link">Transactions</a>
+      </nav>
+      <div class="header-actions">
+        <span class="user-chip">{{ auth.user()?.fullName || auth.user()?.email }}</span>
+        <button type="button" class="btn-logout" (click)="auth.logout()">Logout</button>
+      </div>
+    } @else {
+      <div class="header-actions">
+        <a routerLink="/login" class="nav-link">Login</a>
+        <a routerLink="/register" class="btn btn-golden btn-sm">Register</a>
+      </div>
+    }
   </div>
 </header>

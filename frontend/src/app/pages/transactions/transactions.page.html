@@ -1,0 +1,48 @@
+<section class="page">
+  <header class="page-head">
+    <div>
+      <h1 class="page-title">Transactions</h1>
+      <p class="page-sub">Every ledger entry, in order.</p>
+    </div>
+    <button type="button" class="btn btn-outline" (click)="refresh()">Refresh</button>
+  </header>
+
+  @if (error()) {
+    <div class="alert alert-error">{{ error() }}</div>
+  }
+
+  @if (loading()) {
+    <p class="empty">Loading transactions…</p>
+  } @else if (transactions().length === 0) {
+    <p class="empty">No transactions yet. Make a deposit to get started.</p>
+  } @else {
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Asset</th>
+            <th class="num">Amount</th>
+            <th>Status</th>
+            <th>Method</th>
+            <th>Reference</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (tx of transactions(); track tx.id) {
+            <tr>
+              <td>{{ formatDate(tx.date) }}</td>
+              <td>{{ tx.type }}</td>
+              <td>{{ tx.asset }}</td>
+              <td class="num">{{ format(tx.amount, tx.asset === 'BTC' ? 8 : 2) }} {{ tx.asset }}</td>
+              <td><span class="badge badge-{{ tx.status.toLowerCase() }}">{{ tx.status }}</span></td>
+              <td>{{ tx.method }}</td>
+              <td class="mono">{{ tx.reference }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>

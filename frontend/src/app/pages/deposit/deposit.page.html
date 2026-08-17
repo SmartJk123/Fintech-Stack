@@ -1,0 +1,60 @@
+<section class="page">
+  <h1 class="page-title">Deposit</h1>
+  <p class="page-sub">Add money to your wallet via M-Pesa or crypto.</p>
+
+  @if (error()) {
+    <div class="alert alert-error">{{ error() }}</div>
+  }
+
+  @if (result(); as res) {
+    <div class="alert alert-{{ res.demo ? 'info' : 'success' }}">
+      <strong>{{ res.status }}</strong> — {{ res.message }}
+      @if (res.address) {
+        <code class="result-address">{{ res.address }}</code>
+      }
+    </div>
+  }
+
+  <div class="tabs">
+    <button type="button" class="tab-btn" [class.active]="tab() === 'mpesa'" (click)="tab.set('mpesa')">M-Pesa</button>
+    <button type="button" class="tab-btn" [class.active]="tab() === 'crypto'" (click)="tab.set('crypto')">Crypto</button>
+  </div>
+
+  @if (tab() === 'mpesa') {
+    <form [formGroup]="mpesaForm" (ngSubmit)="mpesaDeposit()" class="panel form">
+      <label class="field">
+        <span>Amount (KES)</span>
+        <input formControlName="amount" type="number" min="1" step="1" placeholder="500" />
+      </label>
+      <label class="field">
+        <span>M-Pesa phone number</span>
+        <input formControlName="phone" type="tel" placeholder="07XXXXXXXX or 2547XXXXXXXX" />
+      </label>
+      <button type="submit" class="btn btn-golden" [disabled]="busy() || mpesaForm.invalid">
+        {{ busy() ? 'Sending STK push…' : 'Deposit via M-Pesa' }}
+      </button>
+      <p class="hint">You will receive an STK push prompt on your phone. Approve it to complete the deposit.</p>
+    </form>
+  }
+
+  @if (tab() === 'crypto') {
+    <form [formGroup]="cryptoForm" (ngSubmit)="cryptoDeposit()" class="panel form">
+      <label class="field">
+        <span>Asset</span>
+        <select formControlName="asset">
+          @for (asset of cryptoAssets(); track asset.symbol) {
+            <option [value]="asset.symbol">{{ asset.symbol }} — {{ asset.name }}</option>
+          }
+        </select>
+      </label>
+      <label class="field">
+        <span>Amount</span>
+        <input formControlName="amount" type="number" min="0.00000001" step="any" placeholder="0.001" />
+      </label>
+      <button type="submit" class="btn btn-golden" [disabled]="busy() || cryptoForm.invalid">
+        {{ busy() ? 'Crediting…' : 'Deposit crypto (demo)' }}
+      </button>
+      <p class="hint">Demo mode credits instantly. In production an on-chain provider confirms deposits via webhook before crediting.</p>
+    </form>
+  }
+</section>

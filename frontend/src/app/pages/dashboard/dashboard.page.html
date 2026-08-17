@@ -1,0 +1,69 @@
+<section class="page">
+  <header class="page-head">
+    <div>
+      <h1 class="page-title">Dashboard</h1>
+      <p class="page-sub">Your balances, live rates and quick actions.</p>
+    </div>
+    <div class="actions">
+      <a routerLink="/deposit" class="btn btn-golden">Deposit</a>
+      <a routerLink="/withdraw" class="btn btn-outline">Withdraw</a>
+    </div>
+  </header>
+
+  @if (error()) {
+    <div class="alert alert-error">{{ error() }}</div>
+  }
+
+  <section class="total-balance">
+    <span>Total value (KES)</span>
+    <strong>KSh {{ format(totalKes(), 2) }}</strong>
+    <small>Live at current rates</small>
+  </section>
+
+  @if (loading()) {
+    <p class="empty">Loading wallets…</p>
+  } @else {
+    <section class="wallet-grid">
+      @for (wallet of wallets(); track wallet.id) {
+        <article class="wallet-card">
+          <div class="wallet-card-top">
+            <span class="wallet-symbol">{{ wallet.asset }}</span>
+            <span class="badge badge-{{ wallet.type }}">{{ wallet.type }}</span>
+          </div>
+          <h3 class="wallet-balance">{{ format(wallet.balance, precision(wallet.asset)) }} {{ wallet.asset }}</h3>
+          <p class="wallet-name">{{ wallet.name }}</p>
+          <p class="wallet-kes">≈ KSh {{ format(kesValue(wallet), 2) }}</p>
+          @if (wallet.pending > 0) {
+            <p class="wallet-pending">{{ format(wallet.pending, precision(wallet.asset)) }} pending</p>
+          }
+        </article>
+      }
+    </section>
+  }
+
+  <section class="rates-panel">
+    <h2 class="panel-title">Live rates</h2>
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Asset</th>
+            <th>Name</th>
+            <th class="num">USD</th>
+            <th class="num">KES</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (rate of rates(); track rate.symbol) {
+            <tr>
+              <td><strong>{{ rate.symbol }}</strong></td>
+              <td>{{ rate.name }}</td>
+              <td class="num">{{ format(rate.usd, rate.precision) }}</td>
+              <td class="num">{{ format(rate.kes, 2) }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+</section>
