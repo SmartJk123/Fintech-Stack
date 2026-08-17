@@ -1,7 +1,7 @@
 # EliteWallet - Fintech System
 
 
-> A full-stack fintech platform: the current prototype is a complete **React + Vite** wallet app (**EliteWallet**), with a documented conversion path to a **Spring Boot** REST API + ledger engine and an **Angular** enterprise dashboard, backed by PostgreSQL. The learning path follows the official [roadmap.sh](https://roadmap.sh/dashboard) tracks for [Spring Boot](https://roadmap.sh/spring-boot) and [Angular](https://roadmap.sh/angular), applied to a real financial product.
+> A full-stack fintech platform: a **Spring Boot** REST API + ledger engine (**Java**) and an **Angular** enterprise dashboard (**TypeScript**), backed by PostgreSQL. The working React prototype that defined the product experience is preserved in git history. The learning path follows the official [roadmap.sh](https://roadmap.sh/dashboard) tracks for [Spring Boot](https://roadmap.sh/spring-boot) and [Angular](https://roadmap.sh/angular), applied to a real financial product.
 
 EliteWallet is a learning-by-building project: instead of learning Spring Boot and Angular in isolation, we build a real fintech platform step by step - multi-currency wallets (KES, USD, BTC), a double-entry ledger, JWT security, dashboards, and async integrations like M-Pesa webhooks.
 
@@ -28,32 +28,27 @@ EliteWallet is a learning-by-building project: instead of learning Spring Boot a
 
 The system has two halves:
 
-- **Frontend (prototype, current)** - the EliteWallet React + Vite app integrated into rontend/. It covers the full wallet experience (dashboard, buy/sell, send/receive, M-Pesa deposits, transactions, portfolio, statements, security, and more) and runs on local mock data with no API keys required.
+- **Frontend** - an Angular 21 SPA (TypeScript) that will consume the API: wallet dashboard, transfers, exchange, portfolio summaries, and admin screens. The React prototype that shaped the UX is preserved in git history.
 - **Backend (in progress)** - a Spring Boot REST API that owns all business logic: the core ledger engine, JWT authentication with role-based access control, idempotent transfer endpoints, and async jobs.
 
 The guiding principle: **Spring Boot owns the money.** No client-side database writes, no business rules in the browser - the API is the only path to the ledger.
 
-## Integrated Prototype (EliteWallet)
+## Frontend (Angular)
 
-The wallet frontend in this repository is a complete, working prototype - the EliteWallet app
-(originally built as the "Joywallet" project) integrated directly into `frontend/`. It runs fully
-offline on realistic mock data and covers the entire product experience:
+The repository frontend is an **Angular 21** SPA (TypeScript), scaffolded with the
+indigo + golden theme (header/footer shell). It will grow into the full enterprise
+dashboard (Phase 3) that consumes the Spring Boot API.
 
-- **Dashboard & Wallet** - live balances, assets (KES / USD / BTC / ETH / USDC), portfolio history
-- **Trading** - Markets, Buy, Sell, and asset detail pages
-- **Money movement** - Send, Receive, Deposit (M-Pesa STK Push demo), Withdraw, Payments
-- **Account** - Transactions, Portfolio, Analytics, Statements, Notifications, Support, Security, Settings, Profile
+> The complete **React + Vite** prototype (EliteWallet) that defined the wallet
+experience (20+ pages, mock services, M-Pesa STK Push demo) is preserved in git
+history (commit `5963b7f`) and in `Joywallet/prototype-react` — it can be restored
+at any time.
 
-**Demo mode is automatic** (no environment variables or API keys): any email/password works on the
-login page, or use the "open the demo dashboard" link. The same UI switches to a real REST API by
-setting `VITE_API_BASE_URL`; the exact contract the Spring Boot backend must implement is defined in
+The REST contract the API implements is defined in
 [frontend/docs/backend-api-contract.md](frontend/docs/backend-api-contract.md), with staged
 Angular + Spring Boot conversion prompts in
 [frontend/docs/vscode-ai-prompts.md](frontend/docs/vscode-ai-prompts.md).
 
-> The earlier Angular 21 scaffold (indigo + golden shell) was replaced by this prototype. It remains
-> in git history (commits `844f8d6`, `59e4b75`) and is the starting point for Phase 3's Angular
-> dashboard.
 ## Architecture at a Glance
 
 ```mermaid
@@ -95,8 +90,8 @@ flowchart LR
 | Cache / Idempotency | Redis | Prevents double charges, caches exchange rates |
 | Security | Spring Security, JWT, BCrypt | Stateless auth + RBAC |
 | Async | Kafka / RabbitMQ | Emails, PDF statements, notifications |
-| Frontend (prototype) | React 18, Vite, Tailwind CSS | Working wallet UI integrated from the Joywallet project |
-| Frontend (target) | Angular, TypeScript, RxJS | Enterprise dashboard SPA (Phase 3) |
+| Frontend | Angular 21, TypeScript, RxJS | Enterprise dashboard SPA (Phase 3) |
+| Prototype (history) | React 18, Vite, Tailwind CSS | EliteWallet prototype preserved in git history |
 | UI | Tailwind CSS | Component library / styling |
 | Tooling | Maven/Gradle, npm, Git, Docker | Build, dependency & deploy |
 
@@ -120,7 +115,7 @@ Do **not** use the Supabase client SDKs inside Spring Boot or Angular. In a Java
 
 ```text
 fintech-stack/
-|-- frontend/                    # EliteWallet prototype (React + Vite + Tailwind)
+|-- frontend/                    # Angular 21 SPA (TypeScript)
 |   |-- src/                     # pages, components, hooks, mock services
 |   |-- docs/                    # API contract + Angular/Spring Boot conversion prompts
 |   |-- public/
@@ -206,18 +201,15 @@ cd backend
 
 The API will be available at `http://localhost:8080/api/v1`.
 
-### Frontend (EliteWallet prototype)
+### Frontend (Angular)
 
 ```bash
 cd frontend
 npm install
-npm run dev
+ng serve
 ```
 
-The app will be available at `http://localhost:5173`.
-
-> The prototype's `node_modules` are already present in this checkout, so `npm run dev` works
-> immediately without an install step.
+The app will be available at `http://localhost:4200`.
 
 ### Configuration
 
@@ -374,7 +366,7 @@ sequenceDiagram
 
 ## Full-Stack Milestones
 
-- [x] **P0 - Wallet prototype:** EliteWallet React app integrated into rontend/ (20+ pages, mock service layer, M-Pesa STK Push demo)
+- [x] **P0 - Wallet prototype:** EliteWallet React app (preserved in git history — 20+ pages, mock service layer, M-Pesa STK Push demo)
 - [ ] **M1 - Skeleton:** both apps scaffolded; frontend calls the backend `/api/v1/health` endpoint.
 - [ ] **M2 - Ledger engine:** schema + Flyway migrations, `Account`/`Wallet` entities, transfer API with double-entry validation and pessimistic locking.
 - [ ] **M3 - Security:** JWT login, RBAC roles, idempotent transfer endpoints with Redis.

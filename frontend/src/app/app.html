@@ -1,0 +1,33 @@
+<div class="page-frame">
+  <app-header></app-header>
+
+  <main class="site-main">
+    <section class="hero">
+      <h1>Your money, <span class="gold-text">balanced by design.</span></h1>
+      <p>Multi-currency wallets, a double-entry ledger, and secure transfers backed by Spring Boot and PostgreSQL.</p>
+      <div class="hero-actions">
+        <a routerLink="/" class="btn btn-golden">Open Dashboard</a>
+        <a routerLink="/" class="btn btn-outline">View the Roadmap</a>
+      </div>
+    </section>
+
+    <section class="cards" aria-label="Platform highlights">
+      <article class="card">
+        <h2>Wallets</h2>
+        <p>KES, USD, and BTC balances in real time.</p>
+      </article>
+      <article class="card">
+        <h2>Transfers</h2>
+        <p>Atomic, idempotent, ledger-locked transactions.</p>
+      </article>
+      <article class="card">
+        <h2>Security</h2>
+        <p>JWT authentication and RBAC on every request.</p>
+      </article>
+    </section>
+
+    <router-outlet></router-outlet>
+  </main>
+
+  <app-footer></app-footer>
+</div>
